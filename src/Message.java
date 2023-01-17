@@ -3,9 +3,11 @@ import java.util.HashMap;
 
 public class Message {
 
-    private Map<String, Value> message;
+    private Topic topic;
+    private Map<String, Value<Generic>> message;
 
-    public Message(HashMap<String, Value> message) {
+    public Message(Topic topic, HashMap<String, Value<Generic>> message) {
+        this.topic = topic;
         this.message = message;
     }
 
@@ -15,6 +17,10 @@ public class Message {
 
     public Value removeValue(String key) {
         return message.remove(key);
+    }
+
+    public Topic getTopic() {
+        return topic;
     }
 
 }
