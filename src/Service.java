@@ -13,7 +13,7 @@ public class Service {
         return inbox;
     }
     
-    public void subscribeToTopic(Topic topic) {
+    public boolean subscribeToTopic(Topic topic) {
         return topic.addSubscriberToTopic(this);
     }
 
