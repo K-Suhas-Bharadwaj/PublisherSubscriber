@@ -3,37 +3,32 @@ import java.util.List;
 
 public class Service {
 
-    private String serviceName;
-    private List<Topic> subscribingTopics;
+    Queue<Message> inbox;
 
-    public Service(String serviceName) {
-        this.serviceName = serviceName;
-        this.subscribingTopics = new ArrayList<Topic>();
+    public Service() {
+        messages = new LinkedList<Message>();
     }
 
-    public Service(String serviceName, ArrayList<Topic> subscribingTopics) {
-        this.serviceName = serviceName;
-        this.subscribingTopics = subscribingTopics;
+    public Queue<Message> getInbox() {
+        return inbox;
+    }
+    
+    public void subscribeToTopic(Topic topic) {
+        return topic.addSubscriberToTopic(this);
     }
 
-    public boolean addSubscribingTopic(Topic topic) {
-        return subscribingTopics.add(topic);
+    public boolean unsubscribeToTopic(Topic topic) {
+        return topic.removeSubscriberToTopic(this);
     }
 
-    public boolean removeSubscribingTopic(Topic topic) {
-        return subscribingTopics.remove(topic);
+    public boolean publishMessage(Message message, MessageRouter messageRouter) {
+        messageRouter.stream(message);
     }
 
-    public boolean publishTopic(Message message, MessagingQueue messagingQueue) {
-        messagingQueue.addMessage(message);
-    }
-
-    public void ingestMessages(MessagingQueue messagingQueue) {
-        for(Message message : messagingQueue.getMessages()) {
-            if(subscribingTopics.contains(message.getTopic())) {
-                Message response = processMessage(message);
-                publishTopic(response, messagingQueue);
-            }
+    public void ingestMessages(MessageRouter messageRouter) {
+        while(!inbox.isEmpty()) {
+            Message response = processMessage(inbox.poll());
+            publishMessage(response, messageRouter);
         }
     }
 
