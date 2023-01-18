@@ -1,12 +1,13 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Service {
+public class Service implements Runnable {
 
     private Queue<Message> inbox;
 
     public Service() {
         messages = new LinkedList<Message>();
+        MessageRouter.getInstance().registerService(this);
     }
 
     public Queue<Message> getInbox() {
@@ -21,24 +22,30 @@ public class Service {
         return topic.removeSubscriberToTopic(this);
     }
 
-    public boolean publishMessage(Message message, MessageRouter messageRouter) {
-        messageRouter.stream(message);
+    public void publishMessage(Message message) {
+        MessageRouter.getInstance().stream(message);
     }
 
-    public void ingestMessages(MessageRouter messageRouter) {
+    public void ingestMessages() {
         while(!inbox.isEmpty()) {
             Message response = processMessage(inbox.poll());
-            publishMessage(response, messageRouter);
+            publishMessage(response);
         }
     }
 
     publish Message processMessage(Message message) {
-        Topic topic = Topic.DefaultResponse;
+        Topic topic = Topic.DEFAULT_RESPONSE;
         Map<String, Value<String>> responseMessage = new HashMap<String, Value<String>>();
         String key = "Default Response";
         Value<String> responseBody = new Value<String>("Request Processed");
         responseMessage.put(key, responseBody);
         return new Message(topic, responseMessage);
+    }
+
+    public void run() {
+        while(true) {
+            ingestMessages();
+        }
     }
 
 }

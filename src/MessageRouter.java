@@ -3,10 +3,19 @@ import java.util.HashSet;
 
 public class MessageRouter {
 
+    private static MessageRouter messageRouter = null;
+
     private Set<Service> services;
 
-    public MessagingQueue() {
+    private MessageRouter() {
         services = new HashSet<Service>();
+    }
+
+    public static MessageRouter getInstance() {
+        if(messageRouter == null) {
+            messageRouter = new MessageRouter();
+        }
+        return messageRouter;
     }
 
     public boolean registerService(Service service) {
