@@ -11,7 +11,7 @@ public class Message {
         this.message = message;
     }
 
-    public Value addValue(String key, Value value) {
+    public Value addValue(String key, Value<Generic> value) {
         return message.put(key, value);
     }
 
