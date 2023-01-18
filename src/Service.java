@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Service {
 
-    Queue<Message> inbox;
+    private Queue<Message> inbox;
 
     public Service() {
         messages = new LinkedList<Message>();
