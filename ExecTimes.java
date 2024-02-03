@@ -9,7 +9,7 @@ private int[] getTotalExecutionTime(int n, String[] logs) {
             int id = Integer.parseInt(st.nextToken());
             String action = st.nextToken();
             int timeStamp = Integer.parseInt(st.nextToken());
-            if(action.equals("Start")) {
+            if(action.equals("start")) {
                 if(currFuncId != -1) execTimes[currFuncId] += timeStamp - currFuncStart;
                 lastFuncId = currFuncId;
                 currFuncId = id;
