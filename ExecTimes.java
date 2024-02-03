@@ -20,5 +20,5 @@ private int[] getTotalExecutionTime(int n, String[] logs) {
                 currFuncStart = timeStamp + 1;
             }
         }
-        return execTime;
+        return execTimes;
     }
